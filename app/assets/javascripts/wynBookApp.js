@@ -5,7 +5,7 @@ let wynBook = angular.module('wynBook', ['ui.router', 'templates'])
         '$urlRouterProvider',
         function($stateProvider, $urlRouterProvider) {
 
-            $stateProvider
+          $stateProvider
                 .state('home', {
                     url: '/home',
                     templateUrl: 'home/_home.html',
@@ -21,6 +21,30 @@ let wynBook = angular.module('wynBook', ['ui.router', 'templates'])
             $urlRouterProvider.otherwise('home');
         }
     ])
+
+    wynBook.factory('posts', [function() {
+        var o = {
+            posts: []
+        };
+        return o;
+    }])
+
+    wynBook.controller('PostsCtrl', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
+            let self = $scope;
+            self.post = posts.posts[$stateParams.id];
+
+            self.addComment = function(){
+              if(self.body === '') { return; }
+                self.post.comments.push({
+                body: self.body,
+                author: 'user',
+                upvotes: 0
+              });
+              self.body = '';
+            };
+
+
+        }]);
 
     wynBook.controller('WyshListController', ['$scope', 'posts', function($scope, posts) {
         let self = $scope;
